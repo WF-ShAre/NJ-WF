@@ -4,7 +4,7 @@ tosca_definitions_version: cloudify_dsl_1_0
 
 imports:
   - http://www.getcloudify.org/spec/cloudify/3.1/types.yaml
-  - https://raw.githubusercontent.com/rawaqasha/e-sc-cloudify/master/esc_nodetypes.yaml
+  - https://github.com/WorkflowCenter-Repositories/Node-Relationship-Types/raw/master/esc_nodetypes.yaml
 
 inputs:
 
@@ -103,7 +103,7 @@ node_templates:
           implementation: LifeCycleScripts/java-install2.sh
           inputs:
             process:
-              args: [container1,NJ-1container, '7']
+              args: [container1,NJ-1container, '8']
     relationships:
       - type: cloudify.relationships.contained_in
         target: container1
