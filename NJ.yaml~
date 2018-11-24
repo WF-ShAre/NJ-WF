@@ -71,7 +71,7 @@ node_templates:
           implementation: LifeCycleScripts/start-inhost.sh
           inputs:
             process:
-              args: [NJ]
+              args: [NJ-basecaching]
     relationships:
       - type: cloudify.relationships.contained_in
         target: host
@@ -84,10 +84,10 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/container.sh
+          implementation: Caching-Corescripts/container.sh
           inputs:
             process:
-              args: [NJ, get_property: [importFile1, block_Url]]
+              args: [NJ-basecaching, get_property: [importFile1, block_Url]]
     relationships:
       - type: cloudify.relationships.contained_in
         target: host
@@ -101,10 +101,10 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/java-install2.sh
+          implementation: Caching-Corescripts/java-install2.sh
           inputs:
             process:
-              args: [container1, NJ, '8']
+              args: [container1, NJ-basecaching, '8']
     relationships:
       - type: cloudify.relationships.contained_in
         target: container1
@@ -121,7 +121,7 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/task-download-multi.sh
+          implementation: Caching-Corescripts/task-download-multi.sh
           inputs:
             process:
              args: [{ get_input: create_image }, container1, get_property: [importFile1, block_Url]]
@@ -129,12 +129,12 @@ node_templates:
           implementation: scripts/get-input.sh
           inputs:
             process:
-             args: [NJ, container1, { get_input: input-dir }, { get_input: input-file1 }]
+             args: [NJ-basecaching, container1, { get_input: input-dir }, { get_input: input-file1 }]
         start: 
-          implementation: LifeCycleScripts/task-deploy.sh
+          implementation: Caching-Corescripts/task-deploy.sh
           inputs:
             process:
-             args: [NJ, container1, { get_input: input-file1 }]
+             args: [NJ-basecaching, container1, { get_input: input-file1 }]
     relationships:
       - type: cloudify.relationships.contained_in
         target: container1
@@ -148,10 +148,10 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:        
         start:
-          implementation: LifeCycleScripts/container.sh
+          implementation: Caching-Corescripts/container.sh
           inputs:
             process:
-              args: [NJ, get_property: [importFile2, block_Url]]
+              args: [NJ-basecaching, get_property: [importFile2, block_Url]]
     relationships:
       - type: cloudify.relationships.contained_in
         target: host
@@ -165,10 +165,10 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/java-install2.sh
+          implementation: Caching-Corescripts/java-install2.sh
           inputs:
             process:
-              args: [container2, NJ, '8']
+              args: [container2, NJ-basecaching, '8']
     relationships:
       - type: cloudify.relationships.contained_in
         target: container2
@@ -185,7 +185,7 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/task-download-multi.sh
+          implementation: Caching-Corescripts/task-download-multi.sh
           inputs:
             process:
              args: [{ get_input: create_image }, container2, get_property: [importFile2, block_Url]]
@@ -193,12 +193,12 @@ node_templates:
           implementation: scripts/get-input.sh
           inputs:
             process:
-             args: [NJ, container2, { get_input: input-dir }, { get_input: input-file2 }]
+             args: [NJ-basecaching, container2, { get_input: input-dir }, { get_input: input-file2 }]
         start: 
-          implementation: LifeCycleScripts/task-deploy.sh
+          implementation: Caching-Corescripts/task-deploy.sh
           inputs:
             process:
-             args: [NJ, container2, { get_input: input-file2 }]
+             args: [NJ-basecaching, container2, { get_input: input-file2 }]
     relationships:
       - type: cloudify.relationships.contained_in
         target: container2
@@ -213,10 +213,10 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         start:
-          implementation: LifeCycleScripts/container.sh
+          implementation: Caching-Corescripts/container.sh
           inputs:
             process:
-              args: [NJ, get_property: [FileJoin, block_Url]]
+              args: [NJ-basecaching, get_property: [FileJoin, block_Url]]
     relationships:
       - type: cloudify.relationships.contained_in
         target: host
@@ -230,10 +230,10 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/java-install2.sh
+          implementation: Caching-Corescripts/java-install2.sh
           inputs:
             process:
-              args: [container3, NJ, '8']
+              args: [container3, NJ-basecaching, '8']
     relationships:
       - type: cloudify.relationships.contained_in
         target: container3
@@ -259,7 +259,7 @@ node_templates:
               implementation: LifeCycleScripts/datacopy.sh
               inputs:
                 process:
-                  args: [importFile1/output-1, FileJoin/file-1, NJ, container3]
+                  args: [importFile1/output-1, FileJoin/file-1, NJ-basecaching, container3]
       - type: block_link
         target: importFile2
         source_interfaces:
@@ -268,13 +268,13 @@ node_templates:
               implementation: LifeCycleScripts/datacopy.sh
               inputs:
                 process:
-                  args: [importFile2/output-1, FileJoin/file-2, NJ, container3]
+                  args: [importFile2/output-1, FileJoin/file-2, NJ-basecaching, container3]
       - type: cloudify.relationships.depends_on
         target: Java2
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/task-download-multi.sh
+          implementation: Caching-Corescripts/task-download-multi.sh
           inputs:
             process:
              args: [{ get_input: create_image }, container3, get_property: [FileJoin, block_Url]]
@@ -284,10 +284,10 @@ node_templates:
             process:
              args: [container1, container2]
         start:
-          implementation: LifeCycleScripts/task-deploy.sh
+          implementation: Caching-Corescripts/task-deploy.sh
           inputs:
             process:
-              args: [NJ, container3]
+              args: [NJ-basecaching, container3]
 
   container4:
     type: docker_container
@@ -297,10 +297,10 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         start:
-          implementation: LifeCycleScripts/container.sh
+          implementation: Caching-Corescripts/container.sh
           inputs:
             process:
-              args: [NJ, get_property: [FilterDupl, block_Url]]
+              args: [NJ-basecaching, get_property: [FilterDupl, block_Url]]
     relationships:
       - type: cloudify.relationships.contained_in
         target: host
@@ -314,10 +314,10 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/java-install2.sh
+          implementation: Caching-Corescripts/java-install2.sh
           inputs:
             process:
-              args: [container4, NJ, '8']
+              args: [container4, NJ-basecaching, '8']
     relationships:
       - type: cloudify.relationships.contained_in
         target: container4
@@ -343,11 +343,11 @@ node_templates:
               implementation: LifeCycleScripts/datacopy.sh
               inputs:
                 process:
-                  args: [FileJoin/file-3, FilterDupl/fasta-files, NJ, container4]
+                  args: [FileJoin/file-3, FilterDupl/fasta-files, NJ-basecaching, container4]
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/task-download-multi.sh
+          implementation: Caching-Corescripts/task-download-multi.sh
           inputs:
             process:
              args: [{ get_input: create_image }, container4, get_property: [FilterDupl, block_Url]]
@@ -357,10 +357,10 @@ node_templates:
             process:
              args: [container3]
         start:
-          implementation: LifeCycleScripts/task-deploy.sh
+          implementation: Caching-Corescripts/task-deploy.sh
           inputs:
             process:
-              args: [NJ, container4]
+              args: [NJ-basecaching, container4]
 
   container5:
     type: docker_container
@@ -370,10 +370,10 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         start:
-          implementation: LifeCycleScripts/container.sh
+          implementation: Caching-Corescripts/container.sh
           inputs:
             process:
-              args: [NJ, get_property: [ClustalW, block_Url]]
+              args: [NJ-basecaching, get_property: [ClustalW, block_Url]]
     relationships:
       - type: cloudify.relationships.contained_in
         target: host
@@ -387,10 +387,10 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/java-install2.sh
+          implementation: Caching-Corescripts/java-install2.sh
           inputs:
             process:
-              args: [container5, NJ, '8']
+              args: [container5, NJ-basecaching, '8']
     relationships:
       - type: cloudify.relationships.contained_in
         target: container5
@@ -405,7 +405,7 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/Lib-install.sh
+          implementation: Caching-Corescripts/Lib-install.sh
           inputs:
             process:
               args: [container5, get_property: [ClustalW_Lib, lib_URL]]
@@ -438,11 +438,11 @@ node_templates:
               implementation: LifeCycleScripts/datacopy.sh
               inputs:
                 process:
-                  args: [FilterDupl/filtered-fasta-files, ClustalW/input-sequences, NJ, container5]        
+                  args: [FilterDupl/filtered-fasta-files, ClustalW/input-sequences, NJ-basecaching, container5]        
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/task-download-multi.sh
+          implementation: Caching-Corescripts/task-download-multi.sh
           inputs:
             process:
              args: [{ get_input: create_image }, container5, get_property: [ClustalW, block_Url]]
@@ -452,10 +452,10 @@ node_templates:
             process:
              args: [container4]
         start:
-          implementation: LifeCycleScripts/task-deploy.sh
+          implementation: Caching-Corescripts/task-deploy.sh
           inputs:
             process:
-              args: [NJ, container5,  get_property: [ClustalW_Lib, lib_path]]
+              args: [NJ-basecaching, container5,  get_property: [ClustalW_Lib, lib_path]]
 
   container6:
     type: docker_container
@@ -465,10 +465,10 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         start:
-          implementation: LifeCycleScripts/container.sh
+          implementation: Caching-Corescripts/container.sh
           inputs:
             process:
-              args: [NJ, get_property: [Mega-NJ, block_Url]]
+              args: [NJ-basecaching, get_property: [Mega-NJ, block_Url]]
     relationships:
       - type: cloudify.relationships.contained_in
         target: host
@@ -482,10 +482,10 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/java-install2.sh
+          implementation: Caching-Corescripts/java-install2.sh
           inputs:
             process:
-              args: [container6, NJ, '8']
+              args: [container6, NJ-basecaching, '8']
     relationships:
       - type: cloudify.relationships.contained_in
         target: container6
@@ -558,11 +558,11 @@ node_templates:
               implementation: LifeCycleScripts/datacopy.sh
               inputs:
                 process:
-                  args: [ClustalW/aligned-sequences, Mega-NJ/input-data, NJ, container6]        
+                  args: [ClustalW/aligned-sequences, Mega-NJ/input-data, NJ-basecaching, container6]        
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/task-download-multi.sh
+          implementation: Caching-Corescripts/task-download-multi.sh
           inputs:
             process:
              args: [{ get_input: create_image }, container6, get_property: [Mega-NJ, block_Url]]
@@ -575,7 +575,7 @@ node_templates:
           implementation: scripts/special-deploy.sh
           inputs:
             process:
-              args: [NJ, container6, 'Mega-CC']
+              args: [NJ-basecaching, container6, 'Mega-CC']
 
   container7:
     type: docker_container
@@ -585,10 +585,10 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         start:
-          implementation: LifeCycleScripts/container.sh
+          implementation: Caching-Corescripts/container.sh
           inputs:
             process:
-              args: [NJ, get_property: [ExportFiles3, block_Url]]
+              args: [NJ-basecaching, get_property: [ExportFiles3, block_Url]]
     relationships:
       - type: cloudify.relationships.contained_in
         target: host
@@ -602,10 +602,10 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/java-install2.sh
+          implementation: Caching-Corescripts/java-install2.sh
           inputs:
             process:
-              args: [container7, NJ, '8']
+              args: [container7, NJ-basecaching, '8']
     relationships:
       - type: cloudify.relationships.contained_in
         target: container7
@@ -629,13 +629,13 @@ node_templates:
               implementation: LifeCycleScripts/datacopy.sh
               inputs:
                 process:
-                  args: [Mega-NJ/analysis-output, ExportFiles1/file-list, NJ, container7]
+                  args: [Mega-NJ/analysis-output, ExportFiles1/file-list, NJ-basecaching, container7]
       - type: cloudify.relationships.depends_on
         target: Java6
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/task-download-multi.sh
+          implementation: Caching-Corescripts/task-download-multi.sh
           inputs:
             process:
              args: [{ get_input: create_image }, container7, get_property: [ExportFiles1, block_Url]]
@@ -645,10 +645,10 @@ node_templates:
             process:
              args: [container6]
         start: 
-          implementation: LifeCycleScripts/task-deploy.sh
+          implementation: Caching-Corescripts/task-deploy.sh
           inputs:
             process:
-             args: [NJ, container7]
+             args: [NJ-basecaching, container7]
 
   container8:
     type: docker_container
@@ -657,10 +657,10 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         start:
-          implementation: LifeCycleScripts/container.sh
+          implementation: Caching-Corescripts/container.sh
           inputs:
             process:
-              args: [NJ, get_property: [ExportFiles2, block_Url]]
+              args: [NJ-basecaching, get_property: [ExportFiles2, block_Url]]
     relationships:
       - type: cloudify.relationships.contained_in
         target: host
@@ -674,10 +674,10 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/java-install2.sh
+          implementation: Caching-Corescripts/java-install2.sh
           inputs:
             process:
-              args: [container8, NJ, '8']
+              args: [container8, NJ-basecaching, '8']
     relationships:
       - type: cloudify.relationships.contained_in
         target: container8
@@ -701,21 +701,21 @@ node_templates:
               implementation: LifeCycleScripts/datacopy.sh
               inputs:
                 process:
-                  args: [Mega-NJ/consensus-output, ExportFiles2/file-list, NJ, container8]
+                  args: [Mega-NJ/consensus-output, ExportFiles2/file-list, NJ-basecaching, container8]
       - type: cloudify.relationships.depends_on
         target: Java7
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/task-download-multi.sh
+          implementation: Caching-Corescripts/task-download-multi.sh
           inputs:
             process:
              args: [{ get_input: create_image }, container8, get_property: [ExportFiles2, block_Url]]
         start: 
-          implementation: LifeCycleScripts/task-deploy.sh
+          implementation: Caching-Corescripts/task-deploy.sh
           inputs:
             process:
-             args: [NJ, container8]
+             args: [NJ-basecaching, container8]
 
   container9:
     type: docker_container
@@ -724,10 +724,10 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         start:
-          implementation: LifeCycleScripts/container.sh
+          implementation: Caching-Corescripts/container.sh
           inputs:
             process:
-              args: [NJ, get_property: [ExportFiles3, block_Url]]
+              args: [NJ-basecaching, get_property: [ExportFiles3, block_Url]]
     relationships:
       - type: cloudify.relationships.contained_in
         target: host
@@ -741,10 +741,10 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/java-install2.sh
+          implementation: Caching-Corescripts/java-install2.sh
           inputs:
             process:
-              args: [container9, NJ, '8']
+              args: [container9, NJ-basecaching, '8']
     relationships:
       - type: cloudify.relationships.contained_in
         target: container9
@@ -768,21 +768,21 @@ node_templates:
               implementation: LifeCycleScripts/datacopy.sh
               inputs:
                 process:
-                  args: [Mega-NJ/summary-info, ExportFiles3/file-list, NJ, container9]
+                  args: [Mega-NJ/summary-info, ExportFiles3/file-list, NJ-basecaching, container9]
       - type: cloudify.relationships.depends_on
         target: Java8
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/task-download-multi.sh
+          implementation: Caching-Corescripts/task-download-multi.sh
           inputs:
             process:
              args: [{ get_input: create_image }, container9, get_property: [ExportFiles3, block_Url]]
         start: 
-          implementation: LifeCycleScripts/task-deploy.sh
+          implementation: Caching-Corescripts/task-deploy.sh
           inputs:
             process:
-             args: [NJ, container9]
+             args: [NJ-basecaching, container9]
 
   container10:
     type: docker_container
@@ -792,10 +792,10 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
          start:
-          implementation: LifeCycleScripts/container.sh
+          implementation: Caching-Corescripts/container.sh
           inputs:
             process:
-              args: [NJ, get_property: [CSV_export1, block_Url]]
+              args: [NJ-basecaching, get_property: [CSV_export1, block_Url]]
     relationships:
       - type: cloudify.relationships.contained_in
         target: host
@@ -809,10 +809,10 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/java-install2.sh
+          implementation: Caching-Corescripts/java-install2.sh
           inputs:
             process:
-              args: [container10, NJ, '8']
+              args: [container10, NJ-basecaching, '8']
     relationships:
       - type: cloudify.relationships.contained_in
         target: container10
@@ -837,21 +837,21 @@ node_templates:
               implementation: LifeCycleScripts/datacopy.sh
               inputs:
                 process:
-                  args: [FilterDupl/sequence-map, CSV_export1/input-data, NJ, container10, 'https://github.com/rawaqasha/eSc-blocks/raw/master/BlockLinkRelation.jar']
+                  args: [FilterDupl/sequence-map, CSV_export1/input-data, NJ-basecaching, container10, 'https://github.com/rawaqasha/eSc-blocks/raw/master/BlockLinkRelation.jar']
       - type: cloudify.relationships.depends_on
         target: Java9
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/task-download-multi.sh
+          implementation: Caching-Corescripts/task-download-multi.sh
           inputs:
             process:
              args: [{ get_input: create_image }, container10, get_property: [CSV_export1, block_Url]]
         start: 
-          implementation: LifeCycleScripts/task-deploy.sh
+          implementation: Caching-Corescripts/task-deploy.sh
           inputs:
             process:
-             args: [NJ, container10]
+             args: [NJ-basecaching, container10]
 
   container11:
     type: docker_container
@@ -860,10 +860,10 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         start:
-          implementation: LifeCycleScripts/container.sh
+          implementation: Caching-Corescripts/container.sh
           inputs:
             process:
-              args: [NJ, get_property: [CSV_export2, block_Url]]
+              args: [NJ-basecaching, get_property: [CSV_export2, block_Url]]
     relationships:
       - type: cloudify.relationships.contained_in
         target: host
@@ -877,10 +877,10 @@ node_templates:
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/java-install2.sh
+          implementation: Caching-Corescripts/java-install2.sh
           inputs:
             process:
-              args: [container11, NJ, '8']
+              args: [container11, NJ-basecaching, '8']
     relationships:
       - type: cloudify.relationships.contained_in
         target: container11
@@ -905,21 +905,21 @@ node_templates:
               implementation: LifeCycleScripts/datacopy.sh
               inputs:
                 process:
-                  args: [FilterDupl/sequence-map, CSV_export2/input-data, NJ, container11]
+                  args: [FilterDupl/sequence-map, CSV_export2/input-data, NJ-basecaching, container11]
       - type: cloudify.relationships.depends_on
         target: Java10
     interfaces:
       cloudify.interfaces.lifecycle:
         create:
-          implementation: LifeCycleScripts/task-download-multi.sh
+          implementation: Caching-Corescripts/task-download-multi.sh
           inputs:
             process:
              args: [{ get_input: create_image }, container11, get_property: [CSV_export2, block_Url]]
         start: 
-          implementation: LifeCycleScripts/task-deploy.sh
+          implementation: Caching-Corescripts/task-deploy.sh
           inputs:
             process:
-             args: [NJ, container11]
+             args: [NJ-basecaching, container11]
 
   finalBlock:
     type: cloudify.nodes.ApplicationModule
@@ -934,7 +934,7 @@ node_templates:
           implementation: LifeCycleScripts/final-inhost.sh
           inputs:
             process:
-              args: [NJ]
+              args: [NJ-basecaching]
     relationships:
       - type: cloudify.relationships.contained_in
         target: host
