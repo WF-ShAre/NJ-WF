@@ -46,7 +46,7 @@
 #Deployment Instruction
 This repository includes all files and scripts to deploy Nieghbour Joining workflow on Multiple Docker containers as follow:
 
-1- Clone the repository to your machine, open a terminal window and change to workflow repository.  
+1- Clone the repository to your machine with --recursive option, open a terminal window and change to workflow repository.  
 2- To execute the workflow with multi containers and the attached input sample, in the terminal run:   
    . ./NJ-deploy.sh 1    
 3- If you have own input files, copy your files to NJ/Input-sample folder, open Input.yaml file and change input files name, then
