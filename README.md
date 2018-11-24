@@ -1,5 +1,5 @@
 # NJ-WF
-![myimage-alt-tag](https://github.com/WorkflowCenter-Repositories/NJ-WF/raw/master/WF%20structure.png)
+![myimage-alt-tag](https://github.com/WF-ShAre/NJ-WF/raw/master/NJ.jpg)
 
 
   WF-Title: Neighbour Joining
