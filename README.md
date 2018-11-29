@@ -56,4 +56,4 @@ This repository includes all files and scripts to deploy Nieghbour Joining workf
 4- To execute the workflow with single container, follow either step 2 or 3 but run:    
    . ./NJ-deploy 2  
     
-After successfully running the workflow, five output files can be found in ~/realeScWF-inhots folder
+After successfully running the workflow, five output files can be found in ~/NJ or ~/NJ-1container folder
