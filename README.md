@@ -16,8 +16,8 @@
 
 ###Blueprint:
 
-  blueprint-name: realeScWF-inhost.yaml
-  Docker-images: rawa/nj 
+  blueprint-name: NJ.yaml
+  Docker-images: dtdwd/nj 
   sizes: 563 MB (Virtual size 1.421 GB)
   OS-types: ubuntu14.4
   tools: 
